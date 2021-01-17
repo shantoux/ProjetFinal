@@ -158,7 +158,7 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                 emplacement[soignant[i].localisation.y][soignant[i].localisation.x].virus_present = 1;
                 *cpt_virus++;
                 virus[*cpt_virus].x = soignant[i].localisation.x;
-                virus[*cpt_virus].y = choix.localisation.y;
+                virus[*cpt_virus].y = soignant[i].localisation.y;
 
             }
             if (mortel == 2 && soin_bool ==1) //si le soignant vit et qu'il y a un soignant à proximité
