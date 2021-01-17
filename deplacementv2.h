@@ -21,7 +21,7 @@
   void quel_chemin(Bonhomme *bonhomme, int indice, int nrow, int ncol, Case emplacement[nrow][ncol]);//permet de choisir d'avancer (même direction ou autre) ou de s'arrêter. Gère les collisions.
   void colision(Dir direction_temp, int nrow, int ncol, Case emplacement[nrow][ncol], Bonhomme *bonhomme, int indice); //fonction appelée par la fonction [quel_chemin] dans un cas de collision. Change de direction ou s'arrête. (gère les collisions multiples).
   void contamination(Bonhomme bonhomme, int nrow, int ncol, Case matrice[nrow][ncol], Case **emplacement_choisi); //cas de dépot d'un virus du fait d'un asymptotique autour de sa case ou sur celle-ci.
-  void infection(Bonhomme *bonhomme, int *cpt_infecte); //determine si un bonhomme devient asymptotique ou malade.
+  void infection(Bonhomme *bonhomme); //determine si un bonhomme devient asymptotique ou malade.
   void Changement_coordonnees(Bonhomme *entite, int indice, Dir nouvelle, int Long, int Larg);
   void liberation_case(Case *place);
   void nouvelle_case(Case *place, Bonhomme *entite, int indice);

@@ -7,7 +7,6 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
   Case emplacement[nrow][ncol])
 {
     int i;
-    int cpt_infecte = 0; //hum pas au bon endroit ?
 
     // [Lecture tableau lambda]
 
@@ -50,7 +49,6 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
             {
                 zone_gradient(lambda[i], N, M, emplacement,1); //retrait de zone de gradient
                 lambda[i].etat = MORT; //???
-                cpt_infecte--;
                 liberation_case(&(emplacement[lambda[i].localisation.y][lambda[i].localisation.x]));
                 emplacement[lambda[i].localisation.y][lambda[i].localisation.x].PV_virus = 4;
                 *cpt_virus++;
@@ -68,7 +66,6 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
             if (lambda[i].tmp_infection == 0)     //si tmp_infection tombe à 0, il redevient sain
             {
                 lambda[i].etat = SAIN;
-                cpt_infecte--;
             }
             else
             {
@@ -81,7 +78,7 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                     {
                         if (choix->lambda_present->etat == SAIN)
                         {
-                            infection(choix->lambda_present, &cpt_infecte);
+                            infection(choix->lambda_present);
                         }
                     }
                     else
@@ -106,18 +103,17 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
         if (emplacement[lambda[i].localisation.y][lambda[i].localisation.x].PV_virus != 0 && lambda[i].etat == SAIN)
         {
             emplacement[lambda[i].localisation.y][lambda[i].localisation.x].PV_virus = 0; //un2moins
-            infection(&(lambda[i]), &cpt_infecte);
+            infection(&(lambda[i]));
             zone_gradient(lambda[i], N, M, emplacement, 0);
         }
     }
 
-    int i;
-    int cpt_infecte = 0; //hum pas au bon endroit ?
+////////////////////// Lecture du tableau soignant ////////////////////////////////////////////////
 
     for (i = 0; i < MAX_S; i++)
     {
 
-        if ((*soignant)[i].etat != MALADE) && (*soignant[i]).etat != MORT))
+        if ((*soignant)[i].etat != MALADE) && (*soignant[i]).etat != MORT)) // si soignant ASYMPTO ou SAIN
         {
             if(emplacement[(soignant)[i].localisation.y][(soignant)[i].localisation.x].gradient != 2)
             //si gradient == 2, le soin s'active et il n'a pas à bouger tant que le gradient est présent
@@ -136,15 +132,14 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
 
         }
 
-        if (soignant[i].etat == MALADE)
+        if (soignant[i].etat == MALADE) // Si soignant Malade
         {
             bool soin_bool = soin(&(soignant[i]), N, M, emplacement);
             int mortel = probabilite(PROB_MOURIR, PROB_VIVRE, 0);
             if (mortel == 1)//soignant meurt
             {
                 zone_gradient(soignant[i], N, M, emplacement,1); //retrait de zone de gradient
-                soignant[i].etat = MORT; //???
-                cpt_infecte--;
+                soignant[i].etat = MORT;
                 liberation_case(&(emplacement[soignant[i].localisation.y][soignant[i].localisation.x]));
                 emplacement[soignant[i].localisation.y][soignant[i].localisation.x].PV_virus = 4;
                 *cpt_virus++;
@@ -162,7 +157,6 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
             if (soignant[i].tmp_infection == 0)     //si tmp_infection tombe à 0, il redevient sain
             {
                 soignant[i].etat = SAIN;
-                cpt_infecte--;
             }
             else
             {
@@ -175,7 +169,7 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                     {
                         if (choix->lambda_present->etat == SAIN)
                         {
-                            infection(choix->lambda_present, &cpt_infecte);
+                            infection(choix->lambda_present);
                         }
                     }
                     else
@@ -215,7 +209,7 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                     *cpt_virus--;
                 }
             }
-            infection(&(soignant[i]), &cpt_infecte);
+            infection(&(soignant[i]));
             zone_gradient(lambda[i], N, M, emplacement, 0);
         }
     }
@@ -462,13 +456,12 @@ void colision(Dir direction_temp, int nrow, int ncol, Case emplacement[nrow][nco
     }
   }
 
-  void infection(Bonhomme *bonhomme, int *cpt_infecte)
+  void infection(Bonhomme *bonhomme)
 {
   int resultat = probabilite(PROB_MALADE, PROB_ASYMPTO, 0);
   if (resultat == 1)
   {   //tombe malade
       bonhomme->etat = MALADE;
-      *cpt_infecte++;
       bonhomme->tmp_infection = 2;
       // zone_gradient
   }
@@ -476,7 +469,6 @@ void colision(Dir direction_temp, int nrow, int ncol, Case emplacement[nrow][nco
   {
       bonhomme->etat = ASYMPTO;
       bonhomme->tmp_infection = 7;
-      *cpt_infecte++;
   }
 }
 

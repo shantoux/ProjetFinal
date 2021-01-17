@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     //BOUCLE DE SIMULATION
 
     for (i = 0; i < tours_simulation_max; i++)
-    //while ( ( ( (cpt_lambda + cpt_soignant) > 0) && (cpt_virus > 0) ) || ( (cpt_infecté > 0) && (cpt_virus == 0) ) )
+    
     {
       deplacement(soignant, &cpt_soignant, lambda, &cpt_lambda, virus,
                   &cpt_virus, N, M, emplacement);
@@ -48,7 +48,6 @@ int main(int argc, char* argv[])
        clrscr();
     }
 
-    //lancement(); //lance le programme
-    //printf("Les %c ont gagné", vainqueur); //indique entre la population humaine et le virus celui qui a erradiqué l'autre
+
     return 0;
 }
