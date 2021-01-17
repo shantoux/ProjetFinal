@@ -45,7 +45,7 @@ struct Case
     bool occupee; //indique la présence d'une des trois entités possibles
     int gradient; //indique le niveau de charge virale (dû à un malade)
     int  PV_virus; //indique le "temps de vie" restant à un virus sur la case
-    bool virus_present;
+    Coordonnees* virus_present;
     Bonhomme* lambda_present; //j'ai pas réussi à utiliser les pointeurs ici, il faudra voir si c'est handicapant pour la suite
     Bonhomme* soignant_present;//ici non plus
 };

@@ -36,7 +36,7 @@ void initialisation(Bonhomme soignant[], Bonhomme lambda[], Coordonnees virus[],
         emplacement[i][j].PV_virus = vie_virus[0];//initialisation du compteur de vie du virus pour cette case
         emplacement[i][j].occupee = 0;
         emplacement[i][j].gradient = 0;
-        emplacement[i][j].virus_present = 0;
+        emplacement[i][j].virus_present = NULL;
         emplacement[i][j].lambda_present = NULL;
         emplacement[i][j].soignant_present = NULL;
 
@@ -47,7 +47,7 @@ void initialisation(Bonhomme soignant[], Bonhomme lambda[], Coordonnees virus[],
         {
         //alors présence d'un virus
             emplacement[i][j].PV_virus = vie_virus[4];//initialisation du compteur de vie du virus pour cette case
-            emplacement[i][j].virus_present = 1;
+            emplacement[i][j].virus_present = &(virus[*cpt_virus]);
             virus[*cpt_virus].y = i;
             virus[*cpt_virus].x = j;
             *cpt_virus += 1;

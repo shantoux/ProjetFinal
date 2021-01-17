@@ -51,10 +51,10 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                 lambda[i].etat = MORT; //???
                 liberation_case(&(emplacement[lambda[i].localisation.y][lambda[i].localisation.x]));
                 emplacement[lambda[i].localisation.y][lambda[i].localisation.x].PV_virus = 4;
-                emplacement[lambda[i].localisation.y][lambda[i].localisation.x].virus_present = 1;
                 *cpt_virus++;
-                virus[*cpt_virus].x = lambda[i].localisation.x;
-                virus[*cpt_virus].y = lambda[i].localisation.y;
+                emplacement[lambda[i].localisation.y][lambda[i].localisation.x].virus_present = &(virus[*cpt_virus]);
+                *cpt_virus++;
+
 
             }
             if (mortel == 2 && soin_bool ==1)
@@ -92,10 +92,11 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                             if (choix->soignant_present->etat == SAIN)
                             {
                                 choix->PV_virus = 4;
-                                choix -> virus_present = 1;
                                 *cpt_virus ++;
-                                virus[*cpt_virus].x = choix.localisation.x;
-                                virus[*cpt_virus].y = choix.localisation.y;
+                                choix -> virus_present = &(virus[*cpt_virus]);
+                                virus[*cpt_virus].x = choix->soignant_present ->localisation.x;
+                                virus[*cpt_virus].y = choix->soignant_present ->localisation.y;
+
 
                             }
                         }
@@ -104,10 +105,9 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                 else
                 {
                     choix->PV_virus = 4;
-                    choix -> virus_present = 1;
                     *cpt_virus++;
-                    virus[*cpt_virus].x = choix.localisation.x;
-                    virus[*cpt_virus].y = choix.localisation.y;
+                    choix -> virus_present = &(virus[*cpt_virus]);
+                    
 
                 }
             }
@@ -115,7 +115,9 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
 
         if (emplacement[lambda[i].localisation.y][lambda[i].localisation.x].PV_virus != 0 && lambda[i].etat == SAIN)
         {
-            emplacement[lambda[i].localisation.y][lambda[i].localisation.x].PV_virus = 0; //un2moins
+            emplacement[lambda[i].localisation.y][lambda[i].localisation.x].PV_virus = 0;//un2moins
+
+            emplacement[lambda[i].localisation.y][lambda[i].localisation.x].PV_virus = NULL;
             infection(&(lambda[i]));
             zone_gradient(lambda[i], N, M, emplacement, 0);
         }
@@ -123,10 +125,10 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
 
 ////////////////////// Lecture du tableau soignant ////////////////////////////////////////////////
 
-    for (i = 0; i < MAX_S; i++)
+    for (i = 0; i < *cpt_soignant; i++)
     {
 
-        if ((*soignant)[i].etat != MALADE) && (*soignant[i]).etat != MORT)) // si soignant ASYMPTO ou SAIN
+        if (soignant[i].etat != MALADE && soignant[i].etat != MORT) // si soignant ASYMPTO ou SAIN
         {
             if(emplacement[(soignant)[i].localisation.y][(soignant)[i].localisation.x].gradient != 2)
             //si gradient == 2, le soin s'active et il n'a pas à bouger tant que le gradient est présent
@@ -136,7 +138,7 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                 {
                   liberation_case(&(emplacement[soignant[i].localisation.y][soignant[i].localisation.x]));
                   Changement_coordonnees(soignant, i, malade_en_vue, N, M);
-                  soigneur[i].direction = malade_en_vue;
+                  soignant[i].direction = malade_en_vue;
                   nouvelle_case(&(emplacement[soignant[i].localisation.y][soignant[i].localisation.x]), soignant, i);
                 }
                 else
@@ -155,8 +157,9 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                 soignant[i].etat = MORT;
                 liberation_case(&(emplacement[soignant[i].localisation.y][soignant[i].localisation.x]));
                 emplacement[soignant[i].localisation.y][soignant[i].localisation.x].PV_virus = 4;
-                emplacement[soignant[i].localisation.y][soignant[i].localisation.x].virus_present = 1;
                 *cpt_virus++;
+                emplacement[soignant[i].localisation.y][soignant[i].localisation.x].virus_present = &(virus[*cpt_virus]);
+
                 virus[*cpt_virus].x = soignant[i].localisation.x;
                 virus[*cpt_virus].y = soignant[i].localisation.y;
 
@@ -196,10 +199,11 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                             if (choix->soignant_present->etat == SAIN)
                             {
                                 choix->PV_virus = 4;
-                                choix -> virus_present = 1;
                                 *cpt_virus++;
-                                virus[*cpt_virus].x = choix.localisation.x;
-                                virus[*cpt_virus].y = choix.localisation.y;
+                                choix -> virus_present = &(virus[*cpt_virus]);
+
+                                virus[*cpt_virus].x = choix->virus_present -> x;
+                                virus[*cpt_virus].y = choix->virus_present -> y;
                             }
                         }
                     }
@@ -207,57 +211,33 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                 else
                 {
                     choix->PV_virus = 4;
-
                     *cpt_virus++;
-                    virus[*cpt_virus].x = choix.localisation.x;
-                    virus[*cpt_virus].y = choix.localisation.y;
+                    choix -> virus_present = &(virus[*cpt_virus]);
+                   
                 }
             }
         }
 
-        if (emplacement[soignant[i].localisation.y][soignant[i].localisation.x].PV_virus != 0) && (soignant[i].etat == SAIN)) //si je suis sur une case virus et pas infecté
+        if (emplacement[soignant[i].localisation.y][soignant[i].localisation.x].PV_virus != 0 && soignant[i].etat == SAIN)
         {
-            emplacement[(soignant[i].localisation.y)][(soignant[i].localisation.x)].PV_virus = 0;
-            int a = 0;
-            for (a = 0 ; a < *cpt_virus ; a++)
-            {
-                if (emplacement[(soignant[i].localisation.y)] == virus[*cpt_virus].x && emplacement[(soignant[i].localisation.y)] == virus[*cpt_virus].y)
-                {
-                    virus[*cpt_virus].x = NULL ;
-                    virus[*cpt_virus].y = NULL ;
-                    *cpt_virus--;
-                }
-            }
+            emplacement[soignant[i].localisation.y][soignant[i].localisation.x].PV_virus = 0;
+            emplacement[soignant[i].localisation.y][soignant[i].localisation.x].virus_present = NULL;
+
             infection(&(soignant[i]));
             zone_gradient(soignant[i], N, M, emplacement, 0);
         }
     }
-
-    for (i = 0; i < MAX_V ; i++)
+    int j=0;
+    for (i = 0; i < N; i++)
     {
-        if (emplacement[virus[i].y][virus[i].x]. == 1)
-        {
-            if (emplacement[virus[i].y][virus[i].x].PV_virus == 0) //cas ou le virus a ete supprimé à cause de l'infection d'un bonhomme sur ce tour
-            {
-                emplacement[(virus[i].y][virus[i].x].virus_present == 0;
-                int a = 0
-                virus[*cpt_virus].x = -1 ; //pour indiquer qu'il n'est plus là
-                virus[*cpt_virus].y = -1 ;
-                *cpt_virus--;
-            }
-            else
-            {
-                emplacement[virus[i].y][virus[i].x].PV_virus--;
-                if (emplacement[virus[i].y][virus[i].x].PV_virus == 0)
-                {
-                    emplacement[(virus[i].y][virus[i].x].virus_present == 0;
-                    virus[*cpt_virus].x = -1 ;
-                    virus[*cpt_virus].y = -1 ;
-                    *cpt_virus--;
-                }
-            }
-        }
+      for (j = 0; j < M; j++)
+      {
+          emplacement[i][j].PV_virus --;
+      }
+
     }
+
+
 }
 
 //------------------- implémentation fonctions -----------------------------------------------
@@ -609,7 +589,9 @@ void zone_gradient(Bonhomme bonhomme, int nrow, int ncol, Case emplacement[nrow]
                   if (u == 2 || k == 2)
                       m = 1;
                   else
+                  {
                       m = 2;
+                  }
 
                   emplacement[(bonhomme.localisation.y-u+nrow)%nrow][(bonhomme.localisation.x+k)%ncol].gradient = m;
                   emplacement[(bonhomme.localisation.y+u)%nrow][(bonhomme.localisation.x-k+ncol)%ncol].gradient = m;
