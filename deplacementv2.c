@@ -107,7 +107,7 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                     choix->PV_virus = 4;
                     *cpt_virus++;
                     choix -> virus_present = &(virus[*cpt_virus]);
-                    
+
 
                 }
             }
@@ -213,7 +213,7 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
                     choix->PV_virus = 4;
                     *cpt_virus++;
                     choix -> virus_present = &(virus[*cpt_virus]);
-                   
+
                 }
             }
         }
@@ -228,7 +228,7 @@ void deplacement(Bonhomme soignant[], int *cpt_soignant, Bonhomme lambda[],
         }
     }
     int j=0;
-    for (i = 0; i < N; i++)
+    for (i = 0; i < N; i++) //lecture de la matrice et décrémentation de la vie virus
     {
       for (j = 0; j < M; j++)
       {
